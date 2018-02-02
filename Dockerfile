@@ -1,7 +1,7 @@
 FROM centos
 MAINTAINER Frank Sung <ysya33333@gmail.com>
 
-RUN rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+COPY ./nginx.repo /etc/yum.repos.d/nginx.repo
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 RUN yum -y update
