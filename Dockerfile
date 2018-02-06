@@ -24,6 +24,9 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY ./conf/default.conf /etc/nginx/conf.d
 COPY ./conf/fastcgi_params /etc/nginx
 
+RUN mv /usr/share/nginx/html /usr/share/nginx/www
+RUN chown -R nginx:nginx /usr/share/nginx/www && chown -R nginx:nginx /var/lib/php/*
+
 # PHP
 # RUN sed -i "s@^memory_limit.*@memory_limit = ${Memory_limit}M@" /etc/php.ini
 RUN sed -i 's@^output_buffering =@output_buffering = On\noutput_buffering =@' /etc/php.ini
@@ -47,15 +50,6 @@ RUN sed -i 's@^;listen.owner\s.*=\s.*@listen.owner = nginx@g' /etc/php-fpm.d/www
 RUN sed -i 's@^;listen.group\s.*=\s.*@listen.group = nginx@g' /etc/php-fpm.d/www.conf
 RUN sed -i 's@^;listen.mode\s.*=\s.*@listen.mode = 0660@g' /etc/php-fpm.d/www.conf
 RUN sed -i 's@^listen\s=\s.*@listen = /dev/shm/php-cgi.sock@g' /etc/php-fpm.d/www.conf
-
-# wordpress
-ADD https://wordpress.org/latest.tar.gz /usr/share/nginx/latest.tar.gz
-RUN cd /usr/share/nginx/ && tar xvf latest.tar.gz && rm latest.tar.gz
-RUN mv /usr/share/nginx/html/5* /usr/share/nginx/wordpress
-RUN rm -rf /usr/share/nginx/html
-RUN mv /usr/share/nginx/wordpress /usr/share/nginx/www
-RUN chown -R nginx:nginx /usr/share/nginx/www && chown -R nginx:nginx /var/lib/php/*
-# RUN chmod -R o+r /usr/share/nginx/www
 
 # Supervisor
 RUN /usr/bin/easy_install supervisor
