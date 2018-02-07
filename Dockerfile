@@ -10,12 +10,15 @@ RUN yum -y upgrade
 RUN yum -y install yum-utils
 RUN yum-config-manager --enable remi-php72
 
-RUN yum -y install nginx php php-mysql php-fpm pwgen python-setuptools curl git unzip
+RUN yum -y install nginx php php-mysql php-fpm python-setuptools curl git unzip
 RUN yum -y install php-curl php-gd php-intl php-pear php-imagick php-imap php-pecl-mcrypt php-memcache php-pspell php-recode php-tidy php-xmlrpc php-xsl php-opcache
 
 RUN chmod 776 /bin/sh
 
 # nginx settings
+COPY ./nginx-modules/ngx_http_brotli_filter_module.so /usr/share/nginx/modules
+COPY ./nginx-modules/ngx_http_brotli_static_module.so /usr/share/nginx/modules
+
 RUN rm -rf /etc/nginx/nginx.conf
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
