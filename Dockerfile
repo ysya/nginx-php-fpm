@@ -16,8 +16,8 @@ RUN yum -y install php-curl php-gd php-intl php-pear php-imagick php-imap php-pe
 RUN chmod 776 /bin/sh
 
 # nginx settings
-COPY ./nginx-modules/ngx_http_brotli_filter_module.so /usr/share/nginx/modules
-COPY ./nginx-modules/ngx_http_brotli_static_module.so /usr/share/nginx/modules
+COPY ./nginx-modules/ngx_http_brotli_filter_module.so /etc/nginx/modules
+COPY ./nginx-modules/ngx_http_brotli_static_module.so /etc/nginx/modules
 
 RUN rm -rf /etc/nginx/nginx.conf
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
