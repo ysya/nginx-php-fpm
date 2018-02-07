@@ -10,7 +10,7 @@ RUN yum -y upgrade
 RUN yum -y install yum-utils
 RUN yum-config-manager --enable remi-php72
 
-RUN yum -y install nginx php php-mysql php-fpm pwgen python-setuptools curl git unzip
+RUN yum -y install nginx php php-mysql php-fpm python-setuptools curl git unzip
 RUN yum -y install php-curl php-gd php-intl php-pear php-imagick php-imap php-pecl-mcrypt php-memcache php-pspell php-recode php-tidy php-xmlrpc php-xsl php-opcache
 
 RUN chmod 776 /bin/sh
@@ -56,8 +56,8 @@ RUN /usr/bin/easy_install supervisor
 RUN /usr/bin/easy_install supervisor-stdout
 COPY ./conf/supervisord.conf /etc/supervisord.conf
 
-COPY ./start.sh /start.sh
-RUN chmod 755 /start.sh
+COPY ./start.sh /start.sh && chmod 755 /start.sh
+RUN yum clean all
 
 EXPOSE 80 443
 
