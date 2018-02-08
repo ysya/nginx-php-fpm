@@ -11,7 +11,9 @@ ENV DEVEL_KIT_MODULE_VERSION 0.3.0
 ENV LUAJIT_LIB=/usr/lib
 ENV LUAJIT_INC=/usr/include/luajit-2.1
 
-RUN apk add --no-cache bash git supervisor
+RUN echo @community/ http://dl-cdn.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache curl bash git supervisor
 
 # nginx
 RUN cd /tmp && git clone https://github.com/google/ngx_brotli \
@@ -160,6 +162,53 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	# forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+RUN apk add --no-cache \
+    autoconf \
+    make \
+    gcc \
+    musl-dev \
+    zlib-dev \
+    cyrus-sasl-dev \
+    curl-dev \
+    tidyhtml-dev \
+    imap-dev \
+    # libmcrypt-dev \
+    libpng-dev \
+    icu-dev \
+    libpq \
+    libxslt-dev \
+    libmemcached-dev \
+    imagemagick-dev \
+    freetype-dev \
+    sqlite-dev \
+    libjpeg-turbo-dev && \
+    docker-php-ext-configure gd \
+      --with-gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install \
+    iconv pdo_mysql pdo_sqlite \
+    mysqli curl tidy gd exif imap intl xmlrpc xsl json soap dom zip opcache && \
+    # docker-php-ext-configure mcrypt --with-mcrypt && \
+    # docker-php-ext-install mcrypt \
+    pecl install imagick && \
+    docker-php-ext-enable imagick && \
+    curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-memcached/archive/php7.tar.gz" && \
+    mkdir -p /usr/src/php/ext/memcached && \
+    tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 && \
+    docker-php-ext-configure memcached && \
+    docker-php-ext-install memcached && \
+    rm /tmp/memcached.tar.gz && \
+    docker-php-source delete && \
+    EXPECTED_COMPOSER_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) && \
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '${EXPECTED_COMPOSER_SIGNATURE}') { echo 'Composer.phar Installer verified'; } else { echo 'Composer.phar Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php --install-dir=/usr/bin --filename=composer && \
+    php -r "unlink('composer-setup.php');" && \
+    apk del gcc musl-dev zlib-dev cyrus-sasl-dev make \
+        autoconf dpkg-dev dpkg file libc-dev g++ libmagic
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./conf/default.conf /etc/nginx/conf.d/default.conf
