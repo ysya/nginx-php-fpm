@@ -32,12 +32,11 @@ RUN chown -R nginx:nginx /usr/share/nginx/www && chown -R nginx:nginx /var/lib/p
 
 # PHP
 # RUN sed -i "s@^memory_limit.*@memory_limit = ${Memory_limit}M@" /etc/php.ini
-RUN sed -i 's@^output_buffering =@output_buffering = On\noutput_buffering =@' /etc/php.ini
+RUN sed -i 's@^output_buffering =@output_buffering = On@' /etc/php.ini
 RUN sed -i 's@^;cgi.fix_pathinfo.*@cgi.fix_pathinfo=0@' /etc/php.ini
-RUN sed -i 's@^short_open_tag = Off@short_open_tag = On@' /etc/php.ini
 RUN sed -i 's@^expose_php = On@expose_php = Off@' /etc/php.ini
 RUN sed -i 's@^request_order.*@request_order = "CGP"@' /etc/php.ini
-RUN sed -i 's@^;date.timezone.*@date.timezone = Asia/Shanghai@' /etc/php.ini
+RUN sed -i 's@^;date.timezone.*@date.timezone = Asia/Taipei@' /etc/php.ini
 RUN sed -i 's@^post_max_size.*@post_max_size = 100M@' /etc/php.ini
 RUN sed -i 's@^upload_max_filesize.*@upload_max_filesize = 100M@' /etc/php.ini
 RUN sed -i 's@^max_execution_time.*@max_execution_time = 600@' etc/php.ini
