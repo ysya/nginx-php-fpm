@@ -186,7 +186,7 @@ RUN sed -i \
         -e 's@^;listen.mode\s.*=\s.*@listen.mode = 0660@g' \
         -e 's@^listen\s=\s.*@listen = /dev/shm/php-cgi.sock@g' \
     ${fpm_conf}
-
+RUN rm -rf /tmp/ngx_brotli
 COPY ./conf/supervisord.conf /etc/supervisord.conf
 COPY ./start.sh /start.sh
 RUN chmod 755 /start.sh
