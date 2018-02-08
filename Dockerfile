@@ -55,7 +55,8 @@ RUN /usr/bin/easy_install supervisor
 RUN /usr/bin/easy_install supervisor-stdout
 COPY ./conf/supervisord.conf /etc/supervisord.conf
 
-COPY ./start.sh /start.sh && chmod 755 /start.sh
+COPY ./start.sh /start.sh
+RUN chmod 755 /start.sh
 RUN yum clean all
 
 EXPOSE 80 443
