@@ -10,7 +10,7 @@ RUN yum -y upgrade
 RUN yum -y install yum-utils
 RUN yum-config-manager --enable remi-php72
 
-RUN yum -y install nginx php php-mysql php-fpm pwgen python-setuptools curl git unzip
+RUN yum -y install nginx php php-mysql php-fpm python-setuptools curl git unzip
 RUN yum -y install php-curl php-gd php-intl php-pear php-imagick php-imap php-pecl-mcrypt php-memcache php-pspell php-recode php-tidy php-xmlrpc php-xsl php-opcache
 
 RUN chmod 776 /bin/sh
@@ -29,12 +29,11 @@ RUN chown -R nginx:nginx /usr/share/nginx/www && chown -R nginx:nginx /var/lib/p
 
 # PHP
 # RUN sed -i "s@^memory_limit.*@memory_limit = ${Memory_limit}M@" /etc/php.ini
-RUN sed -i 's@^output_buffering =@output_buffering = On\noutput_buffering =@' /etc/php.ini
+RUN sed -i 's@^output_buffering =@output_buffering = On@' /etc/php.ini
 RUN sed -i 's@^;cgi.fix_pathinfo.*@cgi.fix_pathinfo=0@' /etc/php.ini
-RUN sed -i 's@^short_open_tag = Off@short_open_tag = On@' /etc/php.ini
 RUN sed -i 's@^expose_php = On@expose_php = Off@' /etc/php.ini
 RUN sed -i 's@^request_order.*@request_order = "CGP"@' /etc/php.ini
-RUN sed -i 's@^;date.timezone.*@date.timezone = Asia/Shanghai@' /etc/php.ini
+RUN sed -i 's@^;date.timezone.*@date.timezone = Asia/Taipei@' /etc/php.ini
 RUN sed -i 's@^post_max_size.*@post_max_size = 100M@' /etc/php.ini
 RUN sed -i 's@^upload_max_filesize.*@upload_max_filesize = 100M@' /etc/php.ini
 RUN sed -i 's@^max_execution_time.*@max_execution_time = 600@' etc/php.ini
@@ -56,8 +55,8 @@ RUN /usr/bin/easy_install supervisor
 RUN /usr/bin/easy_install supervisor-stdout
 COPY ./conf/supervisord.conf /etc/supervisord.conf
 
-COPY ./start.sh /start.sh
-RUN chmod 755 /start.sh
+COPY ./start.sh /start.sh && chmod 755 /start.sh
+RUN yum clean all
 
 EXPOSE 80 443
 
