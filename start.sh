@@ -1,2 +1,2 @@
 # start services
-/usr/bin/supervisord -n
+/usr/bin/supervisord -n -c /etc/supervisord.conf
