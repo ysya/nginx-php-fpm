@@ -5,8 +5,8 @@ ENV php_conf /usr/local/etc/php-fpm.conf
 ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/php.ini
 
-ENV NGINX_VERSION 1.13.8
-ENV LUA_MODULE_VERSION 0.10.11
+ENV NGINX_VERSION 1.15.2
+ENV LUA_MODULE_VERSION 0.10.13
 ENV DEVEL_KIT_MODULE_VERSION 0.3.0
 ENV LUAJIT_LIB=/usr/lib
 ENV LUAJIT_INC=/usr/include/luajit-2.1
